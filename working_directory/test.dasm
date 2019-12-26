@@ -1,0 +1,8 @@
+;  Test
+hello:
+    db 'Hello, World!!!', 0
+data:
+    db 1 2 3 4 5
+    dw 2
+    dd 3
+    dq 4
