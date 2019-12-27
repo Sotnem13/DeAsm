@@ -20,3 +20,6 @@ target_link_libraries(tokenizer Diasm)
 
 
 add_executable(VMExpa demo/vm_experience.cpp)
+
+
+add_executable(Expa demo/experience.cpp)

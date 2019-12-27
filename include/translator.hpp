@@ -12,26 +12,34 @@
 
 bool isLabel(const char* line);
 
+struct Pos {
+    std::string file;
+    uint64_t col;
+    uint64_t line;
+};
+
 struct Token {
     std::string text;
+
+
+
     enum {
-        EOF,
+        EOS,
         Comment,
+        Error,
     } type;
 };
 
 
 struct Tokenizer {
 
-    struct Pos {
-        std::string file;
-        uint64_t pos;
-        uint64_t col;
-        uint64_t line;
-        uint64_t data_size;
-        char* data;
-        bool allocated;
-    };
+   struct ParsingPos {
+       Pos p;
+       uint64_t pos;
+       uint64_t data_size;
+       char* data;
+       bool allocated;
+   };
 
     std::deque<Pos> files;
     char c;
@@ -113,6 +121,14 @@ struct Tokenizer {
         nexChar();
     }
 
+    static Token error(std::string text) {
+        Token t;
+        t.text = std::move(text);
+        t.type = Token::Error;
+    }
+    Token comment() {
+
+    }
 
     Token getToken() {
         skipSpaces();
@@ -121,14 +137,19 @@ struct Tokenizer {
         Token t;
 
         if (m('\0')) {
-            t.type = EOF;
+            t.type = EOS;
             return t;
         }
         if (m("\'\"")) {
             char string_type = c;
             t.text = "";
+            t.type = Token::Comment;
             while (!m("'\"")) {
-                if (m(0))  t.text += c;
+                if (m('\0')) {
+                    return error("unexpected eof");
+                } else {
+                    t.text += c;
+                }
             }
         }
 

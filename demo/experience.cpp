@@ -16,7 +16,7 @@ struct {
 
 
 
-using op = void (f*)(void);
+using op = void (*)(void);
 
 
 
