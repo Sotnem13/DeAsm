@@ -13,16 +13,14 @@
 bool isLabel(const char* line);
 
 struct Pos {
-    std::string file;
+    std::string filename;
     uint64_t col;
     uint64_t line;
 };
 
 struct Token {
     std::string text;
-
-
-
+    Pos pos;
     enum {
         EOS,
         Comment,
@@ -41,7 +39,7 @@ struct Tokenizer {
        bool allocated;
    };
 
-    std::deque<Pos> files;
+    std::deque<ParsingPos> files;
     char c;
     void addData(std::string filename, char* data = 0, size_t size = 0) {
         Pos p;
@@ -103,18 +101,22 @@ struct Tokenizer {
 //        auto res = ( (c == a) || ... );
 //        return res;
 //    }
-    bool m(char c) {
+    bool match(char c) {
         return c == this->c;
     }
 
-    bool m(char *s) {
+    bool match(char *s) {
         auto res = false;
         for (;*s && !(res = m(*s)); ++s);
         return res;
     }
+    
+    bool m(char* s) {
+        return match(s);
+    }
 
     void skipSpaces() {
-        while (m(" \t\n")) nexChar();
+        while (match(" \t\n")) nexChar();
     }
     void skipComment() {
         if (m(';')) while (nexChar(), !m('\n'));

@@ -65,12 +65,9 @@ int main() {
 
 
     print: {
-    auto r1 = *++ip;
-    std::cout << reg[r1] << std::endl;
-    goto ret;
+        auto r1 = *++ip;
+        std::cout << reg[r1] << std::endl;
+        goto ret;
     };
-
-
-
 
 }

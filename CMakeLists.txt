@@ -26,3 +26,4 @@ add_executable(Expa demo/experience.cpp)
 add_executable(SJLJExpa demo/setjmp_vm_exp.cpp)
 
 add_executable(TestParser demo/parser.cpp)
+add_executable(TranslatorExpa demo/translator_experience.cpp)

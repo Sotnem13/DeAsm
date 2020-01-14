@@ -3,6 +3,8 @@
 //
 
 #include <iostream>
+#include <optional>
+#include <functional>
 
 struct Arith;
 
@@ -10,6 +12,9 @@ struct Arith;
 using ArithPrt = Arith*;
 
 struct Arith {
+
+//    virtual ~Arith() = default;
+//    virtual double eval() = 0;
 
     union {
         struct {
@@ -25,7 +30,27 @@ struct Arith {
     } type;
 
 };
+//
+//template <class T>
+//struct ParserResult {
+//    std::optional<T> r;
+//    const char* rest;
+//    operator bool() { return r == true; }
+//};
 
+//template <class T>
+//using Parser = std::function<ParserResult<T>(const char*)>;
+
+//Parser
+
+struct ParseRes {
+    Arith* r;
+    const char* rest;
+    operator bool() { return r != 0; }
+};
+//struct Plus : Arith {
+//
+//};
 
 // from fp -> Haskell parser
 //arith = plus <|> minus <|> expression
@@ -37,10 +62,7 @@ struct Arith {
 //num = ((\_ e _ -> e ) <$> char '(' <*> arith <*> char ')' ) <|> (Number <$> number)
 
 
-struct ParseRes {
-    Arith* r;
-    const char* rest;
-};
+
 
 bool digit(char c) {
     return c >= '0' && c <= '9';
@@ -148,7 +170,7 @@ ParseRes num(const char* input) {
     return {res, c};
 }
 
-double eval(Arith* ar) {
+long eval(Arith* ar) {
     switch (ar->type) {
         case Arith::Plus:  return eval(ar->a) + eval(ar->b);
         case Arith::Minus: return eval(ar->a) - eval(ar->b);
@@ -157,6 +179,11 @@ double eval(Arith* ar) {
     }
     throw std::runtime_error("Eval error");
 }
+
+
+//struct A {
+//    std::optional<A> v;
+//};
 
 int main() {
 
